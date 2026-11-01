@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Atölye Mola | Satış ve Stok</title>
+<style>
+body{margin:0;background:#f7f3ef;color:#171719;font-family:Arial,sans-serif}
+header{background:#7d1728;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:22px}
+.grid{display:flex;flex-wrap:wrap;gap:15px;padding:20px}
+.product{background:white;border:1px solid #ddd;border-radius:10px;padding:15px;width:200px;box-shadow:0 2px 5px rgba(0,0,0,0.1);text-align:center}
+.price{font-size:20px;font-weight:bold;color:#7d1728;margin:10px 0}
+button.sell{background:#7d1728;color:white;border:0;padding:10px;width:100%;border-radius:5px;cursor:pointer;font-weight:bold}
+.panel{padding:20px;background:white;margin:20px;border-radius:10px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}
+</style>
+</head>
+<body>
+<header>
+  <h1>ATÖLYE MOLA - Hızlı Satış Paneli</h1>
+</header>
+
+<div class="grid" id="productGrid"></div>
+
+<div class="panel">
+  <h3>Satış Raporu ve Geçmişi</h3>
+  <table>
+    <thead><tr><th>Ürün</th><th>Fiyat</th><th>İşlem</th></tr></thead>
+    <tbody id="salesTableBody"></tbody>
+  </table>
+</div>
+
+<script>
+const products = [
+  {id:'1', name:'Taş boyama', price:100, qty:15},
+  {id:'2', name:'Küçük tahta boyama', price:100, qty:10},
+  {id:'3', name:'Taş yapıştırma', price:250, qty:3},
+  {id:'4', name:'Vazo boyama', price:350, qty:14},
+  {id:'5', name:'Tahta tuval 20x20', price:250, qty:31},
+  {id:'6', name:'Yetişkin tuval', price:450, qty:7},
+  {id:'7', name:'Bez tuval 20x20', price:150, qty:24}
+];
+
+let sales = [];
+
+function render() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product">
+      <h3>${p.name}</h3>
+      <div class="price">${p.price} TL</div>
+      <div>Stok: ${p.qty}</div>
+      <button class="sell" onclick="sellProduct('${p.id}')">SATIŞ YAP</button>
+    </div>
+  `).join('');
+
+  const tbody = document.getElementById('salesTableBody');
+  tbody.innerHTML = sales.map(s => `
+    <tr><td>${s.name}</td><td>${s.price} TL</td><td>Tamamlandı</td></tr>
+  `).join('');
+}
+
+function sellProduct(id) {
+  const p = products.find(x => x.id === id);
+  if(p && p.qty > 0) {
+    p.qty -= 1;
+    sales.push({name: p.name, price: p.price});
+    render();
+    alert(p.name + ' satış yapıldı!');
+  } else {
+    alert('Stok kalmadı!');
+  }
+}
+
+render();
+</script>
+</body>
+</html>
